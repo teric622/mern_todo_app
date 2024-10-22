@@ -56,17 +56,36 @@ router.get('/', authenticateToken, async (req, res) => {
 
 
 // PUT (update) a todo
+// PUT (update) a todo
 router.put('/:id', async (req, res) => {
   try {
+    // Check if the request body contains the completed status
+    if (req.body.completed !== undefined) {
+      // If provided, toggle the completed status
+      const updatedTodo = await Todo.findByIdAndUpdate(
+        req.params.id,
+        { completed: req.body.completed }, // Update the completed field
+        { new: true }
+      );
+      
+      if (!updatedTodo) {
+        return res.status(404).json({ message: 'Todo not found' });
+      }
+      return res.json(updatedTodo);
+    }
+
+    // If no completed field is provided, update the other fields (like text)
     const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedTodo) {
       return res.status(404).json({ message: 'Todo not found' });
     }
     res.json(updatedTodo);
+    
   } catch (error) {
     res.status(500).json({ message: 'Error updating todo', error: error.message });
   }
 });
+
 
 // DELETE a todo
 router.delete('/:id', async (req, res) => {

@@ -11,16 +11,16 @@ const TodoList = () => {
   // Fetch todos
   const fetchTodos = async () => {
     const token = localStorage.getItem('token');
-  
+
     // Add console logs to debug
     console.log('token:', token);
-  
+
     if (!token) {
       console.error('Token not found');
       setError('You must be logged in to see your todos.');
       return;
     }
-  
+
     try {
       const response = await axios.get('http://localhost:5000/api/todos', {
         headers: { Authorization: `Bearer ${token}` },
@@ -52,6 +52,20 @@ const TodoList = () => {
     } catch (error) {
       console.error('Error adding todo:', error);
       setError('Failed to add todo. Please try again.');
+    }
+  };
+
+  // Mark a todo as completed or not
+  const completeTodo = async (todoId, currentStatus) => {
+    const token = localStorage.getItem('token');
+    try {
+      await axios.put(`http://localhost:5000/api/todos/${todoId}`, { completed: !currentStatus }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchTodos(); // Refresh the todo list after updating
+    } catch (error) {
+      console.error('Error updating todo:', error);
+      setError('Failed to update todo. Please try again.');
     }
   };
 
@@ -106,7 +120,7 @@ const TodoList = () => {
 
       <ul>
         {todos.map(todo => (
-          <li key={todo._id}>
+          <li key={todo._id} style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
             {editTodoId === todo._id ? (
               <div>
                 <input 
@@ -120,6 +134,7 @@ const TodoList = () => {
             ) : (
               <div>
                 <span>{todo.text}</span>
+                <button onClick={() => completeTodo(todo._id, todo.completed)}>Done</button> {/* Button to mark as done */}
                 <button onClick={() => { setEditTodoId(todo._id); setEditText(todo.text); }}>
                   Edit
                 </button>
