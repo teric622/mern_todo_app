@@ -10,7 +10,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/users/register', { username, password });
+      await axios.post('https://mern-todo-app-auqo.onrender.com/api/users/register', { username, password });
       navigate('/'); // Redirect to Login using navigate
     } catch (error) {
       console.error('Registration failed', error);

@@ -22,7 +22,7 @@ const TodoList = () => {
     }
 
     try {
-      const response = await axios.get('http://localhost:5000/api/todos', {
+      const response = await axios.get('https://mern-todo-app-auqo.onrender.com/api/todos', {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log('Fetched todos:', response.data);
@@ -44,7 +44,7 @@ const TodoList = () => {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/todos', { text }, {
+      await axios.post('https://mern-todo-app-auqo.onrender.com/api/todos', { text }, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setText(''); // Clear the input
@@ -59,7 +59,7 @@ const TodoList = () => {
   const completeTodo = async (todoId, currentStatus) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`http://localhost:5000/api/todos/${todoId}`, { completed: !currentStatus }, {
+      await axios.put(`https://mern-todo-app-auqo.onrender.com/api/todos/${todoId}`, { completed: !currentStatus }, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchTodos(); // Refresh the todo list after updating
@@ -73,7 +73,7 @@ const TodoList = () => {
   const deleteTodo = async (todoId) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://localhost:5000/api/todos/${todoId}`, {
+      await axios.delete(`https://mern-todo-app-auqo.onrender.com/api/todos/${todoId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchTodos(); // Refresh the todo list after deletion
@@ -87,7 +87,7 @@ const TodoList = () => {
   const updateTodo = async (todoId) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`http://localhost:5000/api/todos/${todoId}`, { text: editText }, {
+      await axios.put(`https://mern-todo-app-auqo.onrender.com/api/todos/${todoId}`, { text: editText }, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEditTodoId(null); // Stop editing
