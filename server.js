@@ -3,24 +3,21 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const todoRoutes = require('./routes/todoRoutes');
-const userRoutes = require('./routes/userRoutes'); // Import user routes
+const userRoutes = require('./routes/userRoutes');
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-
+// CORS Options
 const corsOptions = {
-    origin: 'https://mern-todo-app-1-pwmp.onrender.com', // Make sure there are no trailing slashes
-    credentials: true, // Optional: if you need to allow cookies or authentication headers
-  };
-  
-  app.use(cors(corsOptions));
-  
+  origin: 'https://mern-todo-app-1-pwmp.onrender.com', // Your frontend URL
+  credentials: true, // Enable cookies, if needed
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
+};
 
-// Middleware
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); // Use CORS with options
 app.use(express.json());
 
 // MongoDB connection
@@ -38,7 +35,10 @@ app.get('/', (req, res) => {
 
 // Use Todo and User routes
 app.use('/api/todos', todoRoutes);
-app.use('/api/users', userRoutes); // Connect user routes
+app.use('/api/users', userRoutes);
+
+// Preflight request handling (optional)
+app.options('*', cors(corsOptions)); // Allow preflight requests for all routes
 
 // Start server
 app.listen(port, () => {
