@@ -10,8 +10,14 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+// CORS options to allow requests from your frontend
+const corsOptions = {
+  origin: 'https://mern-todo-app-1-pwmp.onrender.com/', // Update to your frontend URL
+  credentials: true, // Optional: if you need to allow cookies or authentication headers
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // MongoDB connection
